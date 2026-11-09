@@ -6,6 +6,13 @@ const searchInput = document.getElementById('searchInput');
 const roleFilter = document.getElementById('roleFilter');
 const locationFilter = document.getElementById('locationFilter');
 const typeFilter = document.getElementById('typeFilter');
+const stateFilter = document.getElementById('stateFilter');
+const jobStateSelect = document.getElementById('jobState');
+const INDIAN_STATES = ['Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
+INDIAN_STATES.forEach((name) => {
+  stateFilter.add(new Option(name, name));
+  jobStateSelect.add(new Option(name, name));
+});
 const jobsList = document.getElementById('jobsList');
 const resultCount = document.getElementById('resultCount');
 const emptyState = document.getElementById('emptyState');
@@ -128,6 +135,7 @@ function rowToJob(row) {
     role: row.role,
     listingType: row.listing_type || 'Posting',
     place: row.place || '',
+    state: row.state || '',
     description: row.description || '',
     location: row.location,
     arrangement: row.arrangement,
@@ -148,6 +156,7 @@ function jobToRow(job) {
     role: job.role,
     listing_type: job.listingType,
     place: job.place,
+    state: job.state,
     description: job.description,
     location: job.location,
     arrangement: job.arrangement,
@@ -189,9 +198,9 @@ function renderJobs() {
     const logoClass = job.logoClass || '';
     const logoMark = job.logoMark || job.company.charAt(0).toUpperCase();
     return `
-      <article class="job-card" data-job-id="${escapeHTML(job.id)}" data-role="${escapeHTML(job.role)}" data-type="${escapeHTML(job.listingType)}" data-location="${escapeHTML(job.location)}" data-search="${escapeHTML(getSearchText(job))}">
+      <article class="job-card" data-job-id="${escapeHTML(job.id)}" data-role="${escapeHTML(job.role)}" data-type="${escapeHTML(job.listingType)}" data-location="${escapeHTML(job.location)}" data-state="${escapeHTML(job.state)}" data-search="${escapeHTML(getSearchText(job))}">
         <div class="company-logo ${escapeHTML(logoClass)}">${escapeHTML(logoMark)}${job.logoAccent ? `<span>${escapeHTML(job.logoAccent)}</span>` : ''}</div>
-        <div class="job-main"><div class="job-meta"><span class="role-tag ${roleClass}">${escapeHTML(roleLabels[job.role] || job.role)}</span>${job.listingType !== 'Posting' ? `<span class="type-tag">${escapeHTML(job.listingType)}</span>` : ''}<span class="posted">${escapeHTML(job.posted || 'Just now')}</span></div><h3>${escapeHTML(job.title)}</h3><p class="company">${escapeHTML(job.company)} <span>·</span> ${escapeHTML(job.place || job.location)}</p></div>
+        <div class="job-main"><div class="job-meta"><span class="role-tag ${roleClass}">${escapeHTML(roleLabels[job.role] || job.role)}</span>${job.listingType !== 'Posting' ? `<span class="type-tag">${escapeHTML(job.listingType)}</span>` : ''}<span class="posted">${escapeHTML(job.posted || 'Just now')}</span></div><h3>${escapeHTML(job.title)}</h3><p class="company">${escapeHTML(job.company)} <span>·</span> ${escapeHTML([job.place, job.state].filter(Boolean).join(', ') || job.location)}</p></div>
         <div class="job-details"><span>${escapeHTML(job.arrangement)}</span><strong>${escapeHTML(job.salary)}</strong></div>
         <a class="apply-link" href="${escapeHTML(job.apply)}">View role <span aria-hidden="true">↗</span></a>
       </article>`;
@@ -205,6 +214,7 @@ function filterJobs() {
   const role = roleFilter.value;
   const location = locationFilter.value;
   const type = typeFilter.value;
+  const state = stateFilter.value;
   let visibleCount = 0;
 
   jobsList.querySelectorAll('.job-card').forEach((card) => {
@@ -212,7 +222,8 @@ function filterJobs() {
     const matchesRole = role === 'all' || card.dataset.role === role;
     const matchesLocation = location === 'all' || card.dataset.location === location;
     const matchesType = type === 'all' || card.dataset.type === type;
-    const isVisible = matchesSearch && matchesRole && matchesLocation && matchesType;
+    const matchesState = state === 'all' || card.dataset.state === state;
+    const isVisible = matchesSearch && matchesRole && matchesLocation && matchesType && matchesState;
     card.hidden = !isVisible;
     if (isVisible) visibleCount += 1;
   });
@@ -235,7 +246,9 @@ jobsList.addEventListener('click', (event) => {
   const details = [
     ['Listing type', job.listingType],
     ['Role type', roleLabels[job.role] || job.role],
-    ['Location', job.place ? `${job.place} (${job.location})` : job.location],
+    ['Location', job.place || 'Not specified'],
+    ['State', job.state || 'Not specified'],
+    ['Work mode', job.location],
     ['Description', job.description || 'Not provided'],
     ['Work arrangement', job.arrangement],
     ['Salary range', job.salary],
@@ -262,11 +275,13 @@ searchInput.addEventListener('input', filterJobs);
 roleFilter.addEventListener('change', filterJobs);
 locationFilter.addEventListener('change', filterJobs);
 typeFilter.addEventListener('change', filterJobs);
+stateFilter.addEventListener('change', filterJobs);
 document.getElementById('clearFilters').addEventListener('click', () => {
   searchInput.value = '';
   typeFilter.value = 'all';
   roleFilter.value = 'all';
   locationFilter.value = 'all';
+  stateFilter.value = 'all';
   filterJobs();
 });
 
@@ -315,6 +330,7 @@ jobForm.addEventListener('submit', async (event) => {
     role: document.getElementById('jobRole').value,
     listingType: document.getElementById('jobType').value,
     place: document.getElementById('jobPlace').value.trim(),
+    state: jobStateSelect.value,
     description: document.getElementById('jobDescription').value.trim(),
     location: document.getElementById('jobLocation').value,
     arrangement: document.getElementById('jobArrangement').value.trim(),
@@ -356,6 +372,7 @@ adminJobList.addEventListener('click', async (event) => {
     document.getElementById('jobRole').value = job.role;
     document.getElementById('jobType').value = job.listingType;
     document.getElementById('jobPlace').value = job.place || '';
+    jobStateSelect.value = job.state || '';
     document.getElementById('jobDescription').value = job.description || '';
     document.getElementById('jobLocation').value = job.location;
     document.getElementById('jobArrangement').value = job.arrangement;
@@ -366,6 +383,7 @@ adminJobList.addEventListener('click', async (event) => {
     saveJobButton.textContent = 'Update job';
     document.getElementById('cancelEdit').hidden = false;
     setStatus(adminStatus, '');
+    showAdminTab(document.getElementById('tabPost'));
     jobForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else if (button.dataset.action === 'delete' && window.confirm(`Delete “${job.title}” at ${job.company}?`)) {
     if (!db || !jobsAreLive) return setStatus(adminStatus, 'The database is not connected, so changes cannot be saved.', true);
@@ -388,6 +406,30 @@ function setAdminVisible(isVisible) {
   openAdminButton.textContent = isVisible ? 'Close admin console' : 'Open admin console';
   if (isVisible) loadContactRequests();
 }
+
+const adminTabs = Array.from(document.querySelectorAll('.admin-tab'));
+
+function showAdminTab(tab, focus = false) {
+  adminTabs.forEach((item) => {
+    const isActive = item === tab;
+    item.classList.toggle('is-active', isActive);
+    item.setAttribute('aria-selected', String(isActive));
+    item.tabIndex = isActive ? 0 : -1;
+    document.getElementById(item.dataset.panel).hidden = !isActive;
+  });
+  if (focus) tab.focus();
+}
+
+adminTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => showAdminTab(tab));
+  tab.addEventListener('keydown', (event) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+    if (step) {
+      event.preventDefault();
+      showAdminTab(adminTabs[(index + step + adminTabs.length) % adminTabs.length], true);
+    }
+  });
+});
 
 /* ---------- Contact requests (admin) ---------- */
 
@@ -419,6 +461,33 @@ async function loadContactRequests() {
   contactRequests = data;
   renderContactRequests();
 }
+
+// A leading apostrophe stops spreadsheets from running cells that start with = + - @ as formulas.
+function csvCell(value) {
+  let text = String(value ?? '');
+  if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+document.getElementById('downloadContactsCsv').addEventListener('click', () => {
+  if (contactRequests.length === 0) return setStatus(contactAdminStatus, 'There are no contact requests to download.', true);
+  const header = ['Name', 'Mobile', 'Job role', 'Location', 'Resume file', 'Submitted'];
+  const rows = contactRequests.map((request) => [
+    request.name, request.mobile, request.job_role, request.location,
+    request.resume_path || '', new Date(request.created_at).toLocaleString()
+  ]);
+  const csv = [header, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `contact-requests-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  setStatus(contactAdminStatus, `Downloaded ${contactRequests.length} request${contactRequests.length === 1 ? '' : 's'}.`);
+});
 
 contactList.addEventListener('click', async (event) => {
   const button = event.target.closest('button[data-action]');

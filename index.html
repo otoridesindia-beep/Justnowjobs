@@ -85,13 +85,17 @@
             </select>
           </label>
           <label class="filter-box location-filter">
-            <span class="filter-label">LOCATION</span>
-            <select id="locationFilter" aria-label="Filter by location">
-              <option value="all">Anywhere</option>
+            <span class="filter-label">WORK MODE</span>
+            <select id="locationFilter" aria-label="Filter by work mode">
+              <option value="all">All work modes</option>
               <option value="Remote">Remote</option>
               <option value="Hybrid">Hybrid</option>
               <option value="On-site">On-site</option>
             </select>
+          </label>
+          <label class="filter-box">
+            <span class="filter-label">STATE</span>
+            <select id="stateFilter" aria-label="Filter by state"><option value="all">All states</option></select>
           </label>
           <button class="clear-button" id="clearFilters" type="button">Clear filters</button>
         </div>
@@ -245,6 +249,13 @@
           <span class="admin-badge">LIVE DATABASE</span>
         </div>
 
+        <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+          <button class="admin-tab is-active" id="tabPost" type="button" role="tab" aria-selected="true" aria-controls="panelPost" data-panel="panelPost">Post a job</button>
+          <button class="admin-tab" id="tabManage" type="button" role="tab" aria-selected="false" aria-controls="panelManage" data-panel="panelManage" tabindex="-1">Manage listings</button>
+          <button class="admin-tab" id="tabContacts" type="button" role="tab" aria-selected="false" aria-controls="panelContacts" data-panel="panelContacts" tabindex="-1">Contact requests</button>
+        </div>
+
+        <div class="admin-panel" id="panelPost" role="tabpanel" aria-labelledby="tabPost">
         <form class="admin-form" id="jobForm">
           <input id="jobId" type="hidden" />
           <h3 id="formHeading">Post a job</h3>
@@ -253,8 +264,9 @@
             <label>Company<input id="jobCompany" type="text" placeholder="Company name" required /></label>
             <label>Listing type<select id="jobType" required><option value="Posting">Posting</option><option value="Referral">Referral</option><option value="Walk-in">Walk-in</option><option value="Drive">Drive</option></select></label>
             <label>Role type<select id="jobRole" required><option value="Analytics">Analytics</option><option value="Engineering">Engineering</option><option value="Science">Data science</option><option value="Product">Product</option></select></label>
-            <label>Location type<select id="jobLocation" required><option value="Remote">Remote</option><option value="Hybrid">Hybrid</option><option value="On-site">On-site</option></select></label>
+            <label>Work mode<select id="jobLocation" required><option value="Remote">Remote</option><option value="Hybrid">Hybrid</option><option value="On-site">On-site</option></select></label>
             <label class="admin-wide">Job location (city / address)<input id="jobPlace" type="text" placeholder="e.g. Hyderabad, Hitech City" required></label>
+            <label>State / UT<select id="jobState" required><option value="">Select state</option></select></label>
             <label>Work arrangement<input id="jobArrangement" type="text" value="Full-time" placeholder="Full-time" required /></label>
             <label>Salary range<input id="jobSalary" type="text" placeholder="e.g. $90k – $120k" required /></label>
             <label class="admin-wide">Job description<textarea id="jobDescription" rows="5" placeholder="Responsibilities, requirements, timings, venue details..." required></textarea></label>
@@ -267,17 +279,28 @@
             <span class="admin-status" id="adminStatus" role="status" aria-live="polite"></span>
           </div>
         </form>
+        </div>
 
+        <div class="admin-panel" id="panelManage" role="tabpanel" aria-labelledby="tabManage" hidden>
         <div class="admin-list-wrap">
           <h3>Manage listings <span id="adminJobCount"></span></h3>
           <div class="admin-list" id="adminJobList"></div>
         </div>
         <p class="admin-note">Changes are saved to the shared database and are visible to everyone.</p>
+        </div>
 
+        <div class="admin-panel" id="panelContacts" role="tabpanel" aria-labelledby="tabContacts" hidden>
         <div class="admin-list-wrap contact-admin">
-          <h3>Contact requests <span id="contactCount"></span></h3>
+          <div class="contact-admin-head">
+            <h3>Contact requests <span id="contactCount"></span></h3>
+            <button class="csv-button" id="downloadContactsCsv" type="button" aria-label="Download all contact requests as CSV" title="Download CSV">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"></path></svg>
+              <span>CSV</span>
+            </button>
+          </div>
           <p class="admin-status" id="contactAdminStatus" role="status" aria-live="polite"></p>
           <div class="admin-list" id="contactList"></div>
+        </div>
         </div>
       </section>
 
