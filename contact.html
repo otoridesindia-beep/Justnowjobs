@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Contact Justnow Jobs and share your resume." />
+    <title>Contact us | Justnow Jobs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Justnow Jobs home">
+        <span class="brand-mark">J</span>
+        <span>justnow <strong>jobs</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html#jobs">Browse jobs</a>
+        <a href="index.html#tips">Interview tips</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html" aria-current="page">Contact us</a>
+        <a href="index.html#about">For learners</a>
+      </nav>
+      <a class="header-cta" href="index.html#jobs">Find your next role <span aria-hidden="true">↗</span></a>
+      <a class="profile-button" href="index.html?account=1" aria-label="Sign in or register">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="8" r="3.5"></circle>
+          <path d="M5 20c.7-3.4 3.2-5.2 7-5.2s6.3 1.8 7 5.2"></path>
+        </svg>
+      </a>
+    </header>
+
+    <main id="home">
+      <section class="contact-section" id="contact">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow">CONTACT US</div>
+            <h2>Tell us what you <span>are looking for.</span></h2>
+            <p>Share your details and resume. Our team will get back to you.</p>
+          </div>
+        </div>
+        <form class="contact-card" id="contactForm" novalidate>
+          <div class="contact-fields">
+            <label>Name<input id="contactName" type="text" autocomplete="name" maxlength="100" placeholder="Your full name" required /></label>
+            <label>Mobile number<input id="contactMobile" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" required /></label>
+            <label>Looking for job role<input id="contactRole" type="text" maxlength="150" placeholder="e.g. Data Analyst" required /></label>
+            <label>Location<input id="contactLocation" type="text" maxlength="150" placeholder="Preferred city" required /></label>
+            <label class="contact-wide">Upload resume (PDF, DOC or DOCX, up to 5 MB)<input id="contactResume" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required /></label>
+          </div>
+          <div class="admin-form-actions">
+            <button class="admin-submit" id="contactSubmit" type="submit">Submit</button>
+            <span class="admin-status" id="contactStatus" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+    </main>
+    <footer><a class="brand footer-brand" href="index.html"><span class="brand-mark">J</span><span>justnow <strong>jobs</strong></span></a><span>Opening doors to data careers.</span><span>© 2025 Justnow Jobs</span></footer>
+    <script src="nav.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js" integrity="sha384-tD6X9wDfTRdKpuPoHFZrVW2RXjSYSWjLBPWXxpHprWWl9eaHlwl05aRjHsiKF97n" crossorigin="anonymous"></script>
+    <script src="contact.js"></script>
+  </body>
+</html>

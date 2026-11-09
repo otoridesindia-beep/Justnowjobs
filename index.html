@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Explore data career opportunities on the Justnow Jobs portal." />
+    <title>Data Jobs | Justnow Jobs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Justnow Jobs home">
+        <span class="brand-mark">J</span>
+        <span>justnow <strong>jobs</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#jobs">Browse jobs</a>
+        <a href="#tips">Interview tips</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html">Contact us</a>
+        <a href="#about">For learners</a>
+      </nav>
+      <a class="header-cta" href="#jobs">Find your next role <span aria-hidden="true">↗</span></a>
+      <button class="profile-button" id="profileToggle" type="button" aria-label="Sign in or register" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="8" r="3.5"></circle>
+          <path d="M5 20c.7-3.4 3.2-5.2 7-5.2s6.3 1.8 7 5.2"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-content">
+          <div class="eyebrow"><span class="live-dot"></span> YOUR NEXT CHAPTER STARTS HERE</div>
+          <h1>Make your mark<br />in the <span>world of data.</span></h1>
+          <p class="hero-copy">Great data careers start with the right opportunity. Explore roles from companies building what’s next.</p>
+          <a class="hero-link" href="#jobs">Explore open roles <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <div class="art-center"><span>DATA</span><strong>→</strong><span>IMPACT</span></div>
+          <span class="art-label label-top">INSIGHT</span>
+          <span class="art-label label-bottom">OPPORTUNITY</span>
+          <span class="spark spark-one">✳</span><span class="spark spark-two">✦</span>
+        </div>
+        <div class="hero-foot"><span>CURATED FOR DATA PEOPLE</span><span>LEARN · BUILD · GROW</span></div>
+      </section>
+
+      <section class="jobs-section" id="jobs">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow">THE OPPORTUNITY BOARD</div>
+            <h2>Find work that <span>moves you.</span></h2>
+            <p>Real roles for curious minds and people who love a good dataset.</p>
+          </div>
+          <div class="job-count"><strong id="resultCount">6</strong><span>open roles</span></div>
+        </div>
+
+        <div class="search-panel">
+          <label class="search-box">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Search role, skill, or company..." aria-label="Search jobs" />
+          </label>
+          <label class="filter-box">
+            <span class="filter-label">ROLE TYPE</span>
+            <select id="roleFilter" aria-label="Filter by role type">
+              <option value="all">All data roles</option>
+              <option value="Analytics">Analytics</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Science">Data science</option>
+              <option value="Product">Product</option>
+            </select>
+          </label>
+          <label class="filter-box">
+            <span class="filter-label">LISTING TYPE</span>
+            <select id="typeFilter" aria-label="Filter by listing type">
+              <option value="all">All types</option>
+              <option value="Posting">Posting</option>
+              <option value="Referral">Referral</option>
+              <option value="Walk-in">Walk-in</option>
+              <option value="Drive">Drive</option>
+            </select>
+          </label>
+          <label class="filter-box location-filter">
+            <span class="filter-label">LOCATION</span>
+            <select id="locationFilter" aria-label="Filter by location">
+              <option value="all">Anywhere</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="On-site">On-site</option>
+            </select>
+          </label>
+          <button class="clear-button" id="clearFilters" type="button">Clear filters</button>
+        </div>
+
+        <div class="jobs-list" id="jobsList" aria-live="polite">
+          <article class="job-card" data-role="Analytics" data-location="Remote" data-search="senior data analyst northstar analytics sql tableau remote">
+            <div class="company-logo logo-northstar">N<span>↗</span></div>
+            <div class="job-main"><div class="job-meta"><span class="role-tag">ANALYTICS</span><span class="posted">2 days ago</span></div><h3>Senior Data Analyst</h3><p class="company">Northstar Analytics <span>·</span> Remote</p></div>
+            <div class="job-details"><span>Full-time</span><strong>$110k – $140k</strong></div>
+            <a class="apply-link" href="mailto:careers@northstar.example?subject=Senior%20Data%20Analyst">View role <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="job-card" data-role="Engineering" data-location="Hybrid" data-search="analytics engineer bloom commerce dbt snowflake hybrid new york">
+            <div class="company-logo logo-bloom">b<span>.</span></div>
+            <div class="job-main"><div class="job-meta"><span class="role-tag tag-engineering">ENGINEERING</span><span class="posted">4 days ago</span></div><h3>Analytics Engineer</h3><p class="company">Bloom Commerce <span>·</span> New York, NY</p></div>
+            <div class="job-details"><span>Full-time · Hybrid</span><strong>$125k – $155k</strong></div>
+            <a class="apply-link" href="mailto:careers@bloom.example?subject=Analytics%20Engineer">View role <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="job-card" data-role="Science" data-location="Remote" data-search="machine learning scientist vertex health python pytorch remote healthcare">
+            <div class="company-logo logo-vertex">V<span>+</span></div>
+            <div class="job-main"><div class="job-meta"><span class="role-tag tag-science">DATA SCIENCE</span><span class="posted">1 week ago</span></div><h3>Machine Learning Scientist</h3><p class="company">Vertex Health <span>·</span> Remote</p></div>
+            <div class="job-details"><span>Full-time</span><strong>$145k – $180k</strong></div>
+            <a class="apply-link" href="mailto:careers@vertex.example?subject=Machine%20Learning%20Scientist">View role <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="job-card" data-role="Product" data-location="Hybrid" data-search="product data analyst goodside labs experimentation metrics hybrid austin">
+            <div class="company-logo logo-goodside">g<span>+</span></div>
+            <div class="job-main"><div class="job-meta"><span class="role-tag tag-product">PRODUCT</span><span class="posted">1 week ago</span></div><h3>Product Data Analyst</h3><p class="company">Goodside Labs <span>·</span> Austin, TX</p></div>
+            <div class="job-details"><span>Full-time · Hybrid</span><strong>$95k – $120k</strong></div>
+            <a class="apply-link" href="mailto:careers@goodside.example?subject=Product%20Data%20Analyst">View role <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="job-card" data-role="Engineering" data-location="On-site" data-search="data engineer fieldwork climate bigquery airflow on-site san francisco">
+            <div class="company-logo logo-fieldwork">F<span>/</span></div>
+            <div class="job-main"><div class="job-meta"><span class="role-tag tag-engineering">ENGINEERING</span><span class="posted">2 weeks ago</span></div><h3>Data Engineer</h3><p class="company">Fieldwork Climate <span>·</span> San Francisco, CA</p></div>
+            <div class="job-details"><span>Full-time · On-site</span><strong>$130k – $165k</strong></div>
+            <a class="apply-link" href="mailto:careers@fieldwork.example?subject=Data%20Engineer">View role <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="job-card" data-role="Analytics" data-location="Remote" data-search="business intelligence analyst orbit finance power bi sql remote">
+            <div class="company-logo logo-orbit">O<span>°</span></div>
+            <div class="job-main"><div class="job-meta"><span class="role-tag">ANALYTICS</span><span class="posted">2 weeks ago</span></div><h3>Business Intelligence Analyst</h3><p class="company">Orbit Finance <span>·</span> Remote</p></div>
+            <div class="job-details"><span>Full-time</span><strong>$90k – $115k</strong></div>
+            <a class="apply-link" href="mailto:careers@orbit.example?subject=Business%20Intelligence%20Analyst">View role <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+        <div class="empty-state" id="emptyState" hidden>No roles match those filters. Try a different search.</div>
+        <p class="disclaimer">Listings are sample opportunities curated for the Justnow Jobs community.</p>
+      </section>
+
+      <dialog class="job-dialog" id="jobDialog" aria-labelledby="jobDialogTitle">
+        <div class="job-dialog-header">
+          <div>
+            <div class="eyebrow section-eyebrow">ROLE DETAILS</div>
+            <h2 id="jobDialogTitle">Job title</h2>
+            <p id="jobDialogCompany"></p>
+          </div>
+          <button class="dialog-close" id="closeJobDialog" type="button" aria-label="Close job details">×</button>
+        </div>
+        <div class="job-table-wrap">
+          <table class="job-info-table">
+            <tbody id="jobDialogDetails"></tbody>
+          </table>
+        </div>
+        <div class="job-dialog-actions">
+          <button class="admin-cancel" id="backToJobs" type="button">Back to jobs</button>
+          <a class="admin-submit job-apply-button" id="jobDialogApply" href="#">Apply for this role <span aria-hidden="true">↗</span></a>
+        </div>
+      </dialog>
+
+      <dialog class="job-dialog account-dialog" id="accountDialog" aria-labelledby="accountTitle">
+        <div class="job-dialog-header">
+          <div>
+            <div class="eyebrow section-eyebrow" id="accountEyebrow">YOUR ACCOUNT</div>
+            <h2 id="accountTitle">Welcome</h2>
+            <p id="accountSubtitle">Create an account or sign in with your MPIN.</p>
+          </div>
+          <button class="dialog-close" id="closeAccountDialog" type="button" aria-label="Close account dialog">×</button>
+        </div>
+
+        <div class="account-body" id="guestView">
+          <div class="account-tabs" role="tablist" aria-label="Account options">
+            <button class="account-tab is-active" id="tabSignup" type="button" role="tab" aria-selected="true" aria-controls="signupForm">Sign up</button>
+            <button class="account-tab" id="tabSignin" type="button" role="tab" aria-selected="false" aria-controls="signinForm">Sign in</button>
+          </div>
+
+          <form class="account-form" id="signupForm" role="tabpanel" aria-labelledby="tabSignup" novalidate>
+            <div class="admin-fields account-fields">
+              <label class="admin-wide">Full name<input id="signupName" type="text" autocomplete="name" placeholder="Your full name" required /></label>
+              <label class="admin-wide">Email<input id="signupEmail" type="email" autocomplete="email" placeholder="you@example.com" required /></label>
+              <label class="admin-wide">Mobile number<input id="signupMobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number" required /></label>
+              <label>Create 4-digit MPIN<input id="signupMpin" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="••••" required /></label>
+              <label>Confirm MPIN<input id="signupMpinConfirm" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="••••" required /></label>
+            </div>
+            <div class="admin-form-actions">
+              <button class="admin-submit" type="submit">Create account</button>
+              <span class="admin-status account-status" id="signupStatus" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+
+          <form class="account-form" id="signinForm" role="tabpanel" aria-labelledby="tabSignin" hidden novalidate>
+            <div class="admin-fields account-fields">
+              <label class="admin-wide">Mobile number<input id="signinMobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number" required /></label>
+              <label class="admin-wide">4-digit MPIN<input id="signinMpin" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password" placeholder="••••" required /></label>
+            </div>
+            <div class="admin-form-actions">
+              <button class="admin-submit" type="submit">Sign in</button>
+              <span class="admin-status account-status" id="signinStatus" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+          <p class="admin-note">Your MPIN is your sign-in password. Keep it private.</p>
+          <button class="account-link" id="goAdminLogin" type="button">Admin login →</button>
+        </div>
+
+        <div class="account-body" id="memberView" hidden>
+          <table class="job-info-table">
+            <tbody id="memberDetails"></tbody>
+          </table>
+          <div class="job-dialog-actions account-actions">
+            <button class="admin-cancel" id="signOutButton" type="button">Sign out</button>
+          </div>
+        </div>
+
+        <div class="account-body" id="adminLoginView" hidden>
+          <form class="account-form" id="adminLoginForm" novalidate>
+            <div class="admin-fields account-fields">
+              <label class="admin-wide">Admin mobile number<input id="adminMobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number" required /></label>
+              <label class="admin-wide" id="adminMpinLabel">Admin 4-digit MPIN<input id="adminMpin" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password" placeholder="••••" required /></label>
+            </div>
+            <div class="admin-form-actions">
+              <button class="admin-submit" id="adminLoginSubmit" type="submit">Admin sign in</button>
+              <span class="admin-status account-status" id="adminLoginStatus" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+          <p class="admin-note" id="adminLoginNote">Only accounts granted admin access can sign in here.</p>
+          <button class="account-link" id="backToUserLogin" type="button">← Back to user sign in</button>
+        </div>
+
+        <div class="account-body" id="adminSessionView" hidden>
+          <p class="admin-note">You are signed in as the administrator.</p>
+          <div class="job-dialog-actions account-actions">
+            <button class="admin-cancel" id="adminSignOutButton" type="button">Admin sign out</button>
+            <button class="admin-submit" id="openAdminButton" type="button">Open admin console</button>
+          </div>
+        </div>
+      </dialog>
+
+      <section class="admin-section" id="admin" hidden>
+        <div class="admin-heading">
+          <div>
+            <div class="eyebrow section-eyebrow">PORTAL MANAGEMENT</div>
+            <h2>Admin <span>console.</span></h2>
+            <p>Add new opportunities or update the jobs already on the board.</p>
+          </div>
+          <span class="admin-badge">LIVE DATABASE</span>
+        </div>
+
+        <form class="admin-form" id="jobForm">
+          <input id="jobId" type="hidden" />
+          <h3 id="formHeading">Post a job</h3>
+          <div class="admin-fields">
+            <label>Job title<input id="jobTitle" type="text" placeholder="e.g. Data Analyst" required /></label>
+            <label>Company<input id="jobCompany" type="text" placeholder="Company name" required /></label>
+            <label>Listing type<select id="jobType" required><option value="Posting">Posting</option><option value="Referral">Referral</option><option value="Walk-in">Walk-in</option><option value="Drive">Drive</option></select></label>
+            <label>Role type<select id="jobRole" required><option value="Analytics">Analytics</option><option value="Engineering">Engineering</option><option value="Science">Data science</option><option value="Product">Product</option></select></label>
+            <label>Location type<select id="jobLocation" required><option value="Remote">Remote</option><option value="Hybrid">Hybrid</option><option value="On-site">On-site</option></select></label>
+            <label class="admin-wide">Job location (city / address)<input id="jobPlace" type="text" placeholder="e.g. Hyderabad, Hitech City" required></label>
+            <label>Work arrangement<input id="jobArrangement" type="text" value="Full-time" placeholder="Full-time" required /></label>
+            <label>Salary range<input id="jobSalary" type="text" placeholder="e.g. $90k – $120k" required /></label>
+            <label class="admin-wide">Job description<textarea id="jobDescription" rows="5" placeholder="Responsibilities, requirements, timings, venue details..." required></textarea></label>
+            <label class="admin-wide">Skills / search keywords<input id="jobSkills" type="text" placeholder="SQL, Python, analytics" /></label>
+            <label class="admin-wide">Application link<input id="jobApply" type="text" placeholder="https://... or mailto:..." required /></label>
+          </div>
+          <div class="admin-form-actions">
+            <button class="admin-submit" id="saveJob" type="submit">Post job</button>
+            <button class="admin-cancel" id="cancelEdit" type="button" hidden>Cancel edit</button>
+            <span class="admin-status" id="adminStatus" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+
+        <div class="admin-list-wrap">
+          <h3>Manage listings <span id="adminJobCount"></span></h3>
+          <div class="admin-list" id="adminJobList"></div>
+        </div>
+        <p class="admin-note">Changes are saved to the shared database and are visible to everyone.</p>
+
+        <div class="admin-list-wrap contact-admin">
+          <h3>Contact requests <span id="contactCount"></span></h3>
+          <p class="admin-status" id="contactAdminStatus" role="status" aria-live="polite"></p>
+          <div class="admin-list" id="contactList"></div>
+        </div>
+      </section>
+
+      <section class="tips-section" id="tips">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow">INTERVIEW TIPS</div>
+            <h2>Walk in <span>prepared.</span></h2>
+            <p>Practical advice for landing your next data role.</p>
+          </div>
+        </div>
+        <div class="tips-grid">
+          <article class="tip-card"><span class="tip-number">01</span><h3>Research the company</h3><p>Understand their product, data stack, and recent news. Prepare one thoughtful question about how their team uses data.</p></article>
+          <article class="tip-card"><span class="tip-number">02</span><h3>Brush up on SQL and fundamentals</h3><p>Practise joins, window functions, aggregations, and core statistics. Talk through your reasoning out loud as you solve.</p></article>
+          <article class="tip-card"><span class="tip-number">03</span><h3>Tell stories with your projects</h3><p>For each project, explain the problem, your approach, the tools you chose, and the measurable result.</p></article>
+          <article class="tip-card"><span class="tip-number">04</span><h3>Use the STAR method</h3><p>Answer behavioural questions with Situation, Task, Action, and Result. Keep each answer to about two minutes.</p></article>
+          <article class="tip-card"><span class="tip-number">05</span><h3>Explain it simply</h3><p>Practise describing a technical idea to a non-technical person. Clear communication is a top skill for data roles.</p></article>
+          <article class="tip-card"><span class="tip-number">06</span><h3>Ask smart questions and follow up</h3><p>Ask about team goals, data quality, and success in the first 90 days. Send a short thank-you note within 24 hours.</p></article>
+        </div>
+      </section>
+
+      <section class="community" id="about">
+        <div class="community-mark">J<span>↗</span></div>
+        <div><div class="eyebrow">BUILT FOR YOUR NEXT MOVE</div><h2>Learn the skills. Find your people. <span>Land the role.</span></h2></div>
+        <a href="#jobs">Explore opportunities <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+    <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">J</span><span>justnow <strong>jobs</strong></span></a><span>Opening doors to data careers.</span><span>© 2025 Justnow Jobs</span></footer>
+    <script src="nav.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js" integrity="sha384-tD6X9wDfTRdKpuPoHFZrVW2RXjSYSWjLBPWXxpHprWWl9eaHlwl05aRjHsiKF97n" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
