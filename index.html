@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Explore data career opportunities on the Justnow Jobs portal." />
-    <title>Data Jobs | Justnow Jobs</title>
+    <meta name="description" content="Discover data career opportunities, practical interview guidance, and job alerts with Hyrnex." />
+    <title>Hyrnex | Data Careers</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#home" aria-label="Justnow Jobs home">
-        <span class="brand-mark">J</span>
-        <span>justnow <strong>jobs</strong></span>
+      <a class="brand" href="#home" aria-label="Hyrnex home">
+        <span class="brand-mark">H</span>
+        <span>hyrnex</span>
       </a>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="#jobs">Browse jobs</a>
         <a href="#tips">Interview tips</a>
         <a href="pricing.html">Pricing</a>
         <a href="contact.html">Contact us</a>
-        <a href="#about">For learners</a>
+        <a href="#about">Our approach</a>
       </nav>
       <a class="header-cta" href="#jobs">Find your next role <span aria-hidden="true">↗</span></a>
       <button class="profile-button" id="profileToggle" type="button" aria-label="Sign in or register" aria-haspopup="dialog">
@@ -32,9 +32,9 @@
     <main id="home">
       <section class="hero">
         <div class="hero-content">
-          <div class="eyebrow"><span class="live-dot"></span> YOUR NEXT CHAPTER STARTS HERE</div>
-          <h1>Make your mark<br />in the <span>world of data.</span></h1>
-          <p class="hero-copy">Great data careers start with the right opportunity. Explore roles from companies building what’s next.</p>
+          <div class="eyebrow"><span class="live-dot"></span> A CLEARER PATH TO DATA CAREERS</div>
+          <h1>Find work that<br /><span>moves you forward.</span></h1>
+          <p class="hero-copy">Hyrnex brings data professionals closer to their next opportunity with focused job listings, practical career guidance, and job alerts.</p>
           <a class="hero-link" href="#jobs">Explore open roles <span aria-hidden="true">↓</span></a>
         </div>
         <div class="hero-art" aria-hidden="true">
@@ -46,15 +46,15 @@
           <span class="art-label label-bottom">OPPORTUNITY</span>
           <span class="spark spark-one">✳</span><span class="spark spark-two">✦</span>
         </div>
-        <div class="hero-foot"><span>CURATED FOR DATA PEOPLE</span><span>LEARN · BUILD · GROW</span></div>
+        <div class="hero-foot"><span>BUILT FOR DATA PROFESSIONALS</span><span>DISCOVER · PREPARE · GROW</span></div>
       </section>
 
       <section class="jobs-section" id="jobs">
         <div class="section-heading">
           <div>
-            <div class="eyebrow section-eyebrow">THE OPPORTUNITY BOARD</div>
-            <h2>Find work that <span>moves you.</span></h2>
-            <p>Real roles for curious minds and people who love a good dataset.</p>
+            <div class="eyebrow section-eyebrow">HYRNEX OPPORTUNITIES</div>
+            <h2>Your next move <span>starts here.</span></h2>
+            <p>Explore data roles by specialty, listing type, and work mode.</p>
           </div>
           <div class="job-count"><strong id="resultCount">6</strong><span>open roles</span></div>
         </div>
@@ -100,6 +100,16 @@
           <button class="clear-button" id="clearFilters" type="button">Clear filters</button>
         </div>
 
+        <div class="job-list-tools">
+          <button class="saved-jobs-toggle" id="savedJobsToggle" type="button" aria-pressed="false">
+            Saved jobs <span id="savedJobCount">0</span>
+          </button>
+          <p class="saved-jobs-status" id="savedJobsStatus" role="status" aria-live="polite">Save roles to revisit them later. Saved roles stay on this device.</p>
+        </div>
+        <div class="job-share-feedback">
+          <p id="jobShareStatus" role="status" aria-live="polite"></p>
+        </div>
+
         <div class="jobs-list" id="jobsList" aria-live="polite">
           <article class="job-card" data-role="Analytics" data-location="Remote" data-search="senior data analyst northstar analytics sql tableau remote">
             <div class="company-logo logo-northstar">N<span>↗</span></div>
@@ -139,8 +149,29 @@
           </article>
         </div>
         <div class="empty-state" id="emptyState" hidden>No roles match those filters. Try a different search.</div>
-        <p class="disclaimer">Listings are sample opportunities curated for the Justnow Jobs community.</p>
+        <p class="disclaimer">Sample opportunities are shown while live listings are unavailable.</p>
       </section>
+
+      <dialog class="job-dialog share-dialog" id="shareDialog" aria-labelledby="shareDialogTitle">
+        <div class="job-dialog-header">
+          <div>
+            <h2 id="shareDialogTitle">Share this job</h2>
+            <p id="shareDialogHelp">Choose how you would like to share this opportunity.</p>
+          </div>
+          <button class="dialog-close" id="closeShareDialog" type="button" aria-label="Close share dialog">×</button>
+        </div>
+        <div class="share-dialog-content">
+          <div class="share-dialog-options">
+            <a class="admin-submit share-option" id="shareWhatsApp" href="https://wa.me/" target="_blank" rel="noopener noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
+            <button class="admin-cancel" id="copyShareMessage" type="button">Copy message</button>
+            <button class="admin-cancel" id="moreShareOptions" type="button" hidden>More options</button>
+          </div>
+          <p class="share-dialog-status" id="shareDialogStatus" role="status" aria-live="polite"></p>
+          <label id="shareDialogMessageLabel" for="shareDialogMessage" hidden>Copy this job message
+            <textarea id="shareDialogMessage" rows="6" readonly></textarea>
+          </label>
+        </div>
+      </dialog>
 
       <dialog class="job-dialog" id="jobDialog" aria-labelledby="jobDialogTitle">
         <div class="job-dialog-header">
@@ -242,7 +273,7 @@
       <section class="admin-section" id="admin" hidden>
         <div class="admin-heading">
           <div>
-            <div class="eyebrow section-eyebrow">PORTAL MANAGEMENT</div>
+            <div class="eyebrow section-eyebrow">HYRNEX PORTAL MANAGEMENT</div>
             <h2>Admin <span>console.</span></h2>
             <p>Add new opportunities or update the jobs already on the board.</p>
           </div>
@@ -252,6 +283,7 @@
         <div class="admin-tabs" role="tablist" aria-label="Admin sections">
           <button class="admin-tab is-active" id="tabPost" type="button" role="tab" aria-selected="true" aria-controls="panelPost" data-panel="panelPost">Post a job</button>
           <button class="admin-tab" id="tabManage" type="button" role="tab" aria-selected="false" aria-controls="panelManage" data-panel="panelManage" tabindex="-1">Manage listings</button>
+          <button class="admin-tab" id="tabQuestions" type="button" role="tab" aria-selected="false" aria-controls="panelQuestions" data-panel="panelQuestions" tabindex="-1">Daily questions</button>
           <button class="admin-tab" id="tabContacts" type="button" role="tab" aria-selected="false" aria-controls="panelContacts" data-panel="panelContacts" tabindex="-1">Contact requests</button>
         </div>
 
@@ -289,6 +321,29 @@
         <p class="admin-note">Changes are saved to the shared database and are visible to everyone.</p>
         </div>
 
+        <div class="admin-panel" id="panelQuestions" role="tabpanel" aria-labelledby="tabQuestions" hidden>
+          <form class="admin-form" id="dailyQuestionForm">
+            <input id="dailyQuestionId" type="hidden" />
+            <h3 id="dailyQuestionFormHeading">Post a daily interview question</h3>
+            <div class="admin-fields">
+              <label>Publish date<input id="dailyQuestionPublishDate" type="date" required /></label>
+              <label class="admin-wide">Interview question<textarea id="dailyQuestionAdminPrompt" rows="3" maxlength="500" placeholder="Write the question for this day" required></textarea></label>
+              <label class="admin-wide">Answer guide<textarea id="dailyQuestionAdminAnswer" rows="5" maxlength="3000" placeholder="Share the key points of a strong answer" required></textarea></label>
+            </div>
+            <div class="admin-form-actions">
+              <button class="admin-submit" id="saveDailyQuestion" type="submit">Publish question</button>
+              <button class="admin-cancel" id="cancelDailyQuestionEdit" type="button" hidden>Cancel edit</button>
+              <span class="admin-status" id="dailyQuestionAdminStatus" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+          <div class="admin-list-wrap">
+            <h3>Scheduled questions <span id="dailyQuestionAdminCount"></span></h3>
+            <p class="admin-status" id="dailyQuestionListStatus" role="status" aria-live="polite"></p>
+            <div class="admin-list" id="dailyQuestionAdminList"></div>
+          </div>
+          <p class="admin-note">Questions and answer guides are public on their selected dates. Run <code>supabase-daily-questions.sql</code> in the Supabase SQL Editor to enable publishing.</p>
+        </div>
+
         <div class="admin-panel" id="panelContacts" role="tabpanel" aria-labelledby="tabContacts" hidden>
         <div class="admin-list-wrap contact-admin">
           <div class="contact-admin-head">
@@ -307,11 +362,27 @@
       <section class="tips-section" id="tips">
         <div class="section-heading">
           <div>
-            <div class="eyebrow section-eyebrow">INTERVIEW TIPS</div>
-            <h2>Walk in <span>prepared.</span></h2>
-            <p>Practical advice for landing your next data role.</p>
+            <div class="eyebrow section-eyebrow">CAREER RESOURCES</div>
+            <h2>Show up <span>prepared.</span></h2>
+            <p>Practical interview guidance to help you take your next step in data.</p>
           </div>
         </div>
+        <article class="daily-question" aria-labelledby="dailyQuestionTitle">
+          <div class="daily-question-heading">
+            <div>
+              <div class="eyebrow section-eyebrow">YOUR DAILY PRACTICE</div>
+              <h3 id="dailyQuestionTitle">Interview question for the day</h3>
+            </div>
+            <time class="daily-question-date" id="dailyQuestionDate"></time>
+          </div>
+          <p class="daily-question-prompt" id="dailyQuestionPrompt"></p>
+          <button class="daily-question-toggle" id="dailyQuestionToggle" type="button" aria-expanded="false" aria-controls="dailyQuestionAnswer">Reveal answer guide <span aria-hidden="true">↓</span></button>
+          <div class="daily-question-answer" id="dailyQuestionAnswer" hidden>
+            <h4>What a strong answer can include</h4>
+            <p id="dailyQuestionAnswerText"></p>
+          </div>
+          <p class="daily-question-status" id="dailyQuestionStatus" role="status" aria-live="polite"></p>
+        </article>
         <div class="tips-grid">
           <article class="tip-card"><span class="tip-number">01</span><h3>Research the company</h3><p>Understand their product, data stack, and recent news. Prepare one thoughtful question about how their team uses data.</p></article>
           <article class="tip-card"><span class="tip-number">02</span><h3>Brush up on SQL and fundamentals</h3><p>Practise joins, window functions, aggregations, and core statistics. Talk through your reasoning out loud as you solve.</p></article>
@@ -323,12 +394,12 @@
       </section>
 
       <section class="community" id="about">
-        <div class="community-mark">J<span>↗</span></div>
-        <div><div class="eyebrow">BUILT FOR YOUR NEXT MOVE</div><h2>Learn the skills. Find your people. <span>Land the role.</span></h2></div>
+        <div class="community-mark">H<span>↗</span></div>
+        <div><div class="eyebrow">YOUR CAREER, IN MOTION</div><h2>Discover the role. Prepare with purpose. <span>Move forward.</span></h2></div>
         <a href="#jobs">Explore opportunities <span aria-hidden="true">↗</span></a>
       </section>
     </main>
-    <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">J</span><span>justnow <strong>jobs</strong></span></a><span>Opening doors to data careers.</span><span>© 2025 Justnow Jobs</span></footer>
+    <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">H</span><span>hyrnex</span></a><span>Connecting people with data careers.</span><div class="footer-social" aria-label="Social profiles not yet available"><span class="social-icon" role="img" aria-label="Facebook, profile not yet available"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 21v-8h3l.5-4H14V7c0-1 .4-1.5 1.6-1.5H18V2.1a19 19 0 0 0-2.8-.2C12.4 1.9 10 3.6 10 6.7V9H7v4h3v8z"></path></svg></span><span class="social-icon" role="img" aria-label="Instagram, profile not yet available"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg></span><span class="social-icon" role="img" aria-label="LinkedIn, profile not yet available"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3.3 9h3.4v11H3.3zM9 9h3.3v1.5h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.2 2.3 4.2 5.3v6h-3.4v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20H9z"></path></svg></span></div><span>© 2026 Hyrnex</span></footer>
     <script src="nav.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js" integrity="sha384-tD6X9wDfTRdKpuPoHFZrVW2RXjSYSWjLBPWXxpHprWWl9eaHlwl05aRjHsiKF97n" crossorigin="anonymous"></script>
     <script src="app.js"></script>

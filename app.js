@@ -17,6 +17,17 @@ const jobsList = document.getElementById('jobsList');
 const resultCount = document.getElementById('resultCount');
 const emptyState = document.getElementById('emptyState');
 const jobsNotice = document.querySelector('.disclaimer');
+const savedJobsToggle = document.getElementById('savedJobsToggle');
+const savedJobCount = document.getElementById('savedJobCount');
+const savedJobsStatus = document.getElementById('savedJobsStatus');
+const jobShareStatus = document.getElementById('jobShareStatus');
+const shareDialog = document.getElementById('shareDialog');
+const shareDialogMessage = document.getElementById('shareDialogMessage');
+const shareDialogMessageLabel = document.getElementById('shareDialogMessageLabel');
+const shareDialogStatus = document.getElementById('shareDialogStatus');
+const shareWhatsApp = document.getElementById('shareWhatsApp');
+const moreShareOptions = document.getElementById('moreShareOptions');
+let currentShareData = null;
 const jobForm = document.getElementById('jobForm');
 const adminJobList = document.getElementById('adminJobList');
 const adminJobCount = document.getElementById('adminJobCount');
@@ -61,6 +72,22 @@ const roleClasses = {
   Science: 'tag-science',
   Product: 'tag-product'
 };
+const SAVED_JOBS_KEY = 'hyrnex-saved-jobs';
+let savedJobIds = new Set();
+let savedJobsStorageAvailable = true;
+let savedJobsOnly = false;
+let savedJobsLoadError = '';
+
+try {
+  const savedJobs = JSON.parse(localStorage.getItem(SAVED_JOBS_KEY) || '[]');
+  if (!Array.isArray(savedJobs) || savedJobs.some((id) => typeof id !== 'string')) {
+    throw new Error('Saved jobs data is invalid.');
+  }
+  savedJobIds = new Set(savedJobs);
+} catch (error) {
+  savedJobsStorageAvailable = false;
+  savedJobsLoadError = `Could not load saved jobs: ${error instanceof Error ? error.message : String(error)}`;
+}
 
 // Remove data left behind by the earlier browser-only version of the app.
 ['justnow-jobs', 'justnow-users', 'justnow-admin'].forEach((key) => {
@@ -84,6 +111,8 @@ function setStatus(element, message, isError = false) {
   element.classList.toggle('is-error', isError);
 }
 
+if (savedJobsLoadError) setStatus(savedJobsStatus, savedJobsLoadError, true);
+
 function safeApplyLink(value) {
   const trimmed = String(value ?? '').trim();
   return /^(https?:\/\/|mailto:)/i.test(trimmed) ? trimmed : null;
@@ -101,6 +130,190 @@ function relativeTime(isoDate) {
   const months = Math.floor(days / 30);
   return `${months} month${months === 1 ? '' : 's'} ago`;
 }
+
+/* ---------- Daily interview question ---------- */
+
+const dailyQuestionPrompt = document.getElementById('dailyQuestionPrompt');
+const dailyQuestionDate = document.getElementById('dailyQuestionDate');
+const dailyQuestionAnswerText = document.getElementById('dailyQuestionAnswerText');
+const dailyQuestionAnswer = document.getElementById('dailyQuestionAnswer');
+const dailyQuestionToggle = document.getElementById('dailyQuestionToggle');
+const dailyQuestionStatus = document.getElementById('dailyQuestionStatus');
+const today = new Date();
+const todayDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+dailyQuestionDate.dateTime = todayDate;
+dailyQuestionDate.textContent = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(today);
+dailyQuestionPrompt.textContent = 'Loading today’s interview question…';
+dailyQuestionToggle.hidden = true;
+dailyQuestionAnswer.hidden = true;
+
+function renderDailyQuestion(question) {
+  if (!question) {
+    dailyQuestionPrompt.textContent = 'No interview question has been published for today yet.';
+    dailyQuestionToggle.hidden = true;
+    dailyQuestionAnswer.hidden = true;
+    dailyQuestionDate.dateTime = todayDate;
+    dailyQuestionDate.textContent = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(today);
+    return;
+  }
+
+  const [year, month, day] = question.publish_date.split('-').map(Number);
+  const publishDate = new Date(year, month - 1, day);
+  dailyQuestionPrompt.textContent = question.question;
+  dailyQuestionAnswerText.textContent = question.answer;
+  dailyQuestionDate.dateTime = question.publish_date;
+  dailyQuestionDate.textContent = new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(publishDate);
+  dailyQuestionAnswer.hidden = true;
+  dailyQuestionToggle.hidden = false;
+  dailyQuestionToggle.setAttribute('aria-expanded', 'false');
+  dailyQuestionToggle.innerHTML = 'Reveal answer guide <span aria-hidden="true">↓</span>';
+}
+
+async function loadDailyQuestion() {
+  if (!db) {
+    renderDailyQuestion(null);
+    setStatus(dailyQuestionStatus, 'Daily questions are unavailable because the database is not connected.', true);
+    return;
+  }
+  const { data, error } = await db.from('daily_questions')
+    .select('question, answer, publish_date')
+    .eq('publish_date', todayDate)
+    .maybeSingle();
+  if (error) {
+    renderDailyQuestion(null);
+    return setStatus(dailyQuestionStatus, `Could not load today’s question: ${error.message}`, true);
+  }
+  setStatus(dailyQuestionStatus, '');
+  renderDailyQuestion(data);
+}
+
+dailyQuestionToggle.addEventListener('click', () => {
+  const isExpanded = dailyQuestionToggle.getAttribute('aria-expanded') === 'true';
+  dailyQuestionToggle.setAttribute('aria-expanded', String(!isExpanded));
+  dailyQuestionAnswer.hidden = isExpanded;
+  dailyQuestionToggle.innerHTML = isExpanded
+    ? 'Reveal answer guide <span aria-hidden="true">↓</span>'
+    : 'Hide answer guide <span aria-hidden="true">↑</span>';
+});
+
+/* ---------- Daily question admin ---------- */
+
+const dailyQuestionForm = document.getElementById('dailyQuestionForm');
+const dailyQuestionId = document.getElementById('dailyQuestionId');
+const dailyQuestionPublishDate = document.getElementById('dailyQuestionPublishDate');
+const dailyQuestionAdminPrompt = document.getElementById('dailyQuestionAdminPrompt');
+const dailyQuestionAdminAnswer = document.getElementById('dailyQuestionAdminAnswer');
+const dailyQuestionFormHeading = document.getElementById('dailyQuestionFormHeading');
+const saveDailyQuestionButton = document.getElementById('saveDailyQuestion');
+const dailyQuestionAdminStatus = document.getElementById('dailyQuestionAdminStatus');
+const dailyQuestionListStatus = document.getElementById('dailyQuestionListStatus');
+const dailyQuestionAdminList = document.getElementById('dailyQuestionAdminList');
+const dailyQuestionAdminCount = document.getElementById('dailyQuestionAdminCount');
+const cancelDailyQuestionEdit = document.getElementById('cancelDailyQuestionEdit');
+let adminDailyQuestions = [];
+
+function resetDailyQuestionForm() {
+  dailyQuestionForm.reset();
+  dailyQuestionId.value = '';
+  dailyQuestionPublishDate.value = todayDate;
+  dailyQuestionFormHeading.textContent = 'Post a daily interview question';
+  saveDailyQuestionButton.textContent = 'Publish question';
+  cancelDailyQuestionEdit.hidden = true;
+}
+
+function renderDailyQuestionAdminList() {
+  dailyQuestionAdminCount.textContent = `(${adminDailyQuestions.length})`;
+  dailyQuestionAdminList.innerHTML = adminDailyQuestions.map((question) => `
+    <div class="admin-list-item">
+      <div><strong>${escapeHTML(question.publish_date)} · ${escapeHTML(question.question)}</strong><span>${escapeHTML(question.answer)}</span></div>
+      <div class="admin-actions">
+        <button class="admin-action" type="button" data-action="edit-question" data-id="${escapeHTML(question.id)}">Edit</button>
+        <button class="admin-action delete" type="button" data-action="delete-question" data-id="${escapeHTML(question.id)}">Delete</button>
+      </div>
+    </div>`).join('') || '<p class="admin-note">No daily questions yet. Publish one using the form above.</p>';
+}
+
+async function loadDailyQuestionAdminList() {
+  if (!db || !currentProfile?.is_admin) return;
+  setStatus(dailyQuestionListStatus, 'Loading scheduled questions…');
+  const { data, error } = await db.from('daily_questions')
+    .select('id, question, answer, publish_date')
+    .order('publish_date', { ascending: false });
+  if (error) return setStatus(dailyQuestionListStatus, `Could not load scheduled questions: ${error.message}`, true);
+  adminDailyQuestions = data;
+  setStatus(dailyQuestionListStatus, '');
+  renderDailyQuestionAdminList();
+}
+
+dailyQuestionPublishDate.value = todayDate;
+
+dailyQuestionForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!db || !currentProfile?.is_admin) return setStatus(dailyQuestionAdminStatus, 'Admin sign-in and a database connection are required.', true);
+
+  const question = {
+    publish_date: dailyQuestionPublishDate.value,
+    question: dailyQuestionAdminPrompt.value.trim(),
+    answer: dailyQuestionAdminAnswer.value.trim(),
+    created_by: currentProfile.id
+  };
+  if (!question.publish_date || question.question.length < 10 || question.answer.length < 10) {
+    return setStatus(dailyQuestionAdminStatus, 'Enter a publish date, a question, and an answer guide (at least 10 characters each).', true);
+  }
+
+  saveDailyQuestionButton.disabled = true;
+  const query = dailyQuestionId.value
+    ? db.from('daily_questions').update(question).eq('id', dailyQuestionId.value).select()
+    : db.from('daily_questions').upsert(question, { onConflict: 'publish_date' }).select();
+  const { data, error } = await query;
+  saveDailyQuestionButton.disabled = false;
+  if (error || !data || data.length === 0) {
+    return setStatus(dailyQuestionAdminStatus, `Could not publish the question: ${error?.message || 'No question was saved.'}`, true);
+  }
+
+  resetDailyQuestionForm();
+  setStatus(dailyQuestionAdminStatus, 'Daily question published.');
+  await loadDailyQuestionAdminList();
+  await loadDailyQuestion();
+});
+
+cancelDailyQuestionEdit.addEventListener('click', () => {
+  resetDailyQuestionForm();
+  setStatus(dailyQuestionAdminStatus, '');
+});
+
+dailyQuestionAdminList.addEventListener('click', async (event) => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+  const question = adminDailyQuestions.find((item) => item.id === button.dataset.id);
+  if (!question) return;
+
+  if (button.dataset.action === 'edit-question') {
+    dailyQuestionId.value = question.id;
+    dailyQuestionPublishDate.value = question.publish_date;
+    dailyQuestionAdminPrompt.value = question.question;
+    dailyQuestionAdminAnswer.value = question.answer;
+    dailyQuestionFormHeading.textContent = 'Edit daily interview question';
+    saveDailyQuestionButton.textContent = 'Save changes';
+    cancelDailyQuestionEdit.hidden = false;
+    setStatus(dailyQuestionAdminStatus, '');
+    dailyQuestionForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    dailyQuestionPublishDate.focus();
+    return;
+  }
+
+  if (button.dataset.action === 'delete-question' && window.confirm(`Delete the interview question for ${question.publish_date}?`)) {
+    if (!db || !currentProfile?.is_admin) return setStatus(dailyQuestionListStatus, 'Admin sign-in and a database connection are required.', true);
+    const { data, error } = await db.from('daily_questions').delete().eq('id', question.id).select();
+    if (error || !data || data.length === 0) {
+      return setStatus(dailyQuestionListStatus, `Could not delete the question: ${error?.message || 'No question was deleted.'}`, true);
+    }
+    if (dailyQuestionId.value === question.id) resetDailyQuestionForm();
+    setStatus(dailyQuestionListStatus, 'Question deleted.');
+    await loadDailyQuestionAdminList();
+    if (question.publish_date === todayDate) await loadDailyQuestion();
+  }
+});
 
 /* ---------- Jobs (stored in Supabase) ---------- */
 
@@ -184,7 +397,7 @@ async function fetchJobs() {
   }
   jobs = data.map(rowToJob);
   jobsAreLive = true;
-  jobsNotice.textContent = 'Listings are posted by the Justnow Jobs team.';
+  jobsNotice.textContent = 'Browse current opportunities on the Hyrnex jobs board.';
   renderJobs();
 }
 
@@ -193,16 +406,23 @@ function getSearchText(job) {
 }
 
 function renderJobs() {
+  savedJobCount.textContent = savedJobIds.size;
+  savedJobsToggle.setAttribute('aria-pressed', String(savedJobsOnly));
+  savedJobsToggle.disabled = !savedJobsStorageAvailable;
   jobsList.innerHTML = jobs.map((job) => {
     const roleClass = roleClasses[job.role] || '';
     const logoClass = job.logoClass || '';
     const logoMark = job.logoMark || job.company.charAt(0).toUpperCase();
+    const isSaved = savedJobIds.has(String(job.id));
     return `
       <article class="job-card" data-job-id="${escapeHTML(job.id)}" data-role="${escapeHTML(job.role)}" data-type="${escapeHTML(job.listingType)}" data-location="${escapeHTML(job.location)}" data-state="${escapeHTML(job.state)}" data-search="${escapeHTML(getSearchText(job))}">
         <div class="company-logo ${escapeHTML(logoClass)}">${escapeHTML(logoMark)}${job.logoAccent ? `<span>${escapeHTML(job.logoAccent)}</span>` : ''}</div>
-        <div class="job-main"><div class="job-meta"><span class="role-tag ${roleClass}">${escapeHTML(roleLabels[job.role] || job.role)}</span>${job.listingType !== 'Posting' ? `<span class="type-tag">${escapeHTML(job.listingType)}</span>` : ''}<span class="posted">${escapeHTML(job.posted || 'Just now')}</span></div><h3>${escapeHTML(job.title)}</h3><p class="company">${escapeHTML(job.company)} <span>·</span> ${escapeHTML([job.place, job.state].filter(Boolean).join(', ') || job.location)}</p></div>
+        <div class="job-main"><div class="job-meta"><span class="role-tag ${roleClass}">${escapeHTML(roleLabels[job.role] || job.role)}</span>${job.listingType !== 'Posting' ? `<span class="type-tag">${escapeHTML(job.listingType)}</span>` : ''}<span class="posted">${escapeHTML(job.posted || 'Just now')}</span><button class="save-job-button${isSaved ? ' is-saved' : ''}" type="button" data-action="toggle-save" data-job-id="${escapeHTML(job.id)}" aria-label="${isSaved ? 'Remove' : 'Save'} ${escapeHTML(job.title)}" aria-pressed="${isSaved}"${savedJobsStorageAvailable ? '' : ' disabled'}><span aria-hidden="true">${isSaved ? '★' : '☆'}</span>${isSaved ? 'Saved' : 'Save'}</button><button class="share-job-button" type="button" data-job-id="${escapeHTML(job.id)}" aria-label="Share ${escapeHTML(job.title)} at ${escapeHTML(job.company)}" title="Share job"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><circle cx="18" cy="19" r="2.5"></circle><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"></path></svg></button></div><h3>${escapeHTML(job.title)}</h3><p class="company">${escapeHTML(job.company)} <span>·</span> ${escapeHTML([job.place, job.state].filter(Boolean).join(', ') || job.location)}</p></div>
         <div class="job-details"><span>${escapeHTML(job.arrangement)}</span><strong>${escapeHTML(job.salary)}</strong></div>
         <a class="apply-link" href="${escapeHTML(job.apply)}">View role <span aria-hidden="true">↗</span></a>
+        <div class="job-share-feedback job-card-share-feedback" hidden>
+          <p role="status" aria-live="polite"></p>
+        </div>
       </article>`;
   }).join('');
   filterJobs();
@@ -223,24 +443,139 @@ function filterJobs() {
     const matchesLocation = location === 'all' || card.dataset.location === location;
     const matchesType = type === 'all' || card.dataset.type === type;
     const matchesState = state === 'all' || card.dataset.state === state;
-    const isVisible = matchesSearch && matchesRole && matchesLocation && matchesType && matchesState;
+    const matchesSaved = !savedJobsOnly || savedJobIds.has(card.dataset.jobId);
+    const isVisible = matchesSearch && matchesRole && matchesLocation && matchesType && matchesState && matchesSaved;
     card.hidden = !isVisible;
     if (isVisible) visibleCount += 1;
   });
 
   resultCount.textContent = visibleCount;
   emptyState.hidden = visibleCount !== 0;
+  if (visibleCount === 0) {
+    emptyState.textContent = savedJobsOnly && savedJobIds.size === 0
+      ? 'No saved jobs yet. Use the Save button on a role to keep it here.'
+      : savedJobsOnly
+        ? 'No saved jobs match those filters. Try changing your search or filters.'
+        : 'No roles match those filters. Try a different search.';
+  }
 }
 
+function shareJob(job, card) {
+  const feedback = card.querySelector('.job-card-share-feedback');
+  const status = feedback.querySelector('[role="status"]');
+  jobsList.querySelectorAll('.job-card-share-feedback').forEach((item) => { item.hidden = true; });
+  setStatus(status, '');
+  const showStatus = (message, isError = false) => {
+    feedback.hidden = false;
+    setStatus(status, message, isError);
+  };
+  if (!jobsAreLive) {
+    return showStatus('Sample jobs cannot be shared. Please try again when live listings are available.', true);
+  }
+  if (!/^https?:$/.test(location.protocol)) {
+    return showStatus('Sharing requires the website to be hosted online.', true);
+  }
+  const url = new URL(location.href);
+  url.search = '';
+  url.searchParams.set('job', String(job.id));
+  url.hash = 'jobs';
+  const shareUrl = url.href;
+  const description = String(job.description || '').replace(/\s+/g, ' ').trim();
+  const characters = Array.from(description);
+  const summary = characters.length > 180
+    ? `${characters.slice(0, 179).join('').trimEnd()}…`
+    : description || [job.arrangement, job.place || job.location].filter(Boolean).join(' · ');
+  const shareText = [`${job.title} at ${job.company}`, summary, 'Find this opportunity on Hyrnex:'].filter(Boolean).join('\n');
+  const shareMessage = `${shareText}\n${shareUrl}`;
+
+  currentShareData = { title: `${job.title} at ${job.company} | Hyrnex`, text: shareText, url: shareUrl };
+  shareWhatsApp.href = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+  shareDialogMessage.value = shareMessage;
+  shareDialogMessageLabel.hidden = true;
+  moreShareOptions.hidden = typeof navigator.share !== 'function';
+  setStatus(shareDialogStatus, '');
+  shareDialog.showModal();
+}
+
+document.getElementById('copyShareMessage').addEventListener('click', async () => {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(shareDialogMessage.value);
+      shareDialogMessageLabel.hidden = true;
+      return setStatus(shareDialogStatus, 'Job message copied.');
+    } catch (error) {
+      console.warn('Could not copy the job message:', error);
+    }
+  }
+  shareDialogMessageLabel.hidden = false;
+  setStatus(shareDialogStatus, 'Could not copy automatically. Select and copy the message below.', true);
+  shareDialogMessage.focus();
+  shareDialogMessage.select();
+});
+
+moreShareOptions.addEventListener('click', async () => {
+  if (!currentShareData || typeof navigator.share !== 'function') {
+    return setStatus(shareDialogStatus, 'Device sharing is unavailable. Use WhatsApp or copy the message.', true);
+  }
+  try {
+    await navigator.share(currentShareData);
+  } catch (error) {
+    if (error.name !== 'AbortError') setStatus(shareDialogStatus, 'Could not open device sharing. Use WhatsApp or copy the message.', true);
+  }
+});
+
+document.getElementById('closeShareDialog').addEventListener('click', () => shareDialog.close());
+shareDialog.addEventListener('click', (event) => {
+  if (event.target === shareDialog) shareDialog.close();
+});
+
 jobsList.addEventListener('click', (event) => {
+  const shareButton = event.target.closest('.share-job-button');
+  if (shareButton) {
+    const job = jobs.find((item) => String(item.id) === shareButton.dataset.jobId);
+    if (job) shareJob(job, shareButton.closest('.job-card'));
+    else setStatus(jobShareStatus, 'This job is no longer available.', true);
+    return;
+  }
+  const saveButton = event.target.closest('.save-job-button');
+  if (saveButton) {
+    const jobId = saveButton.dataset.jobId;
+    const job = jobs.find((item) => String(item.id) === jobId);
+    if (!job) return;
+
+    const nextSavedJobIds = new Set(savedJobIds);
+    const isSaved = nextSavedJobIds.has(jobId);
+    if (isSaved) nextSavedJobIds.delete(jobId);
+    else nextSavedJobIds.add(jobId);
+
+    try {
+      localStorage.setItem(SAVED_JOBS_KEY, JSON.stringify(Array.from(nextSavedJobIds)));
+    } catch (error) {
+      savedJobsStorageAvailable = false;
+      savedJobsToggle.disabled = true;
+      setStatus(savedJobsStatus, `Could not update saved jobs: ${error instanceof Error ? error.message : String(error)}`, true);
+      renderJobs();
+      return;
+    }
+
+    savedJobIds = nextSavedJobIds;
+    setStatus(savedJobsStatus, isSaved ? `${job.title} removed from saved jobs.` : `${job.title} saved for later.`);
+    renderJobs();
+    return;
+  }
+
   const viewLink = event.target.closest('.apply-link');
   if (!viewLink) return;
   event.preventDefault();
 
   const card = viewLink.closest('.job-card');
-  const job = jobs.find((item) => item.id === card.dataset.jobId);
+  const job = jobs.find((item) => String(item.id) === card.dataset.jobId);
   if (!job) return;
 
+  openJobDialog(job);
+});
+
+function openJobDialog(job) {
   jobDialogTitle.textContent = job.title;
   jobDialogCompany.textContent = job.company;
   const details = [
@@ -263,7 +598,7 @@ jobsList.addEventListener('click', (event) => {
   jobDialogApply.hidden = !applyLink;
   if (applyLink) jobDialogApply.href = applyLink;
   jobDialog.showModal();
-});
+}
 
 document.getElementById('closeJobDialog').addEventListener('click', () => jobDialog.close());
 document.getElementById('backToJobs').addEventListener('click', () => jobDialog.close());
@@ -276,12 +611,19 @@ roleFilter.addEventListener('change', filterJobs);
 locationFilter.addEventListener('change', filterJobs);
 typeFilter.addEventListener('change', filterJobs);
 stateFilter.addEventListener('change', filterJobs);
+savedJobsToggle.addEventListener('click', () => {
+  savedJobsOnly = !savedJobsOnly;
+  savedJobsToggle.setAttribute('aria-pressed', String(savedJobsOnly));
+  filterJobs();
+});
 document.getElementById('clearFilters').addEventListener('click', () => {
   searchInput.value = '';
   typeFilter.value = 'all';
   roleFilter.value = 'all';
   locationFilter.value = 'all';
   stateFilter.value = 'all';
+  savedJobsOnly = false;
+  savedJobsToggle.setAttribute('aria-pressed', 'false');
   filterJobs();
 });
 
@@ -404,7 +746,10 @@ document.getElementById('cancelEdit').addEventListener('click', () => {
 function setAdminVisible(isVisible) {
   adminSection.hidden = !isVisible;
   openAdminButton.textContent = isVisible ? 'Close admin console' : 'Open admin console';
-  if (isVisible) loadContactRequests();
+  if (isVisible) {
+    loadContactRequests();
+    loadDailyQuestionAdminList();
+  }
 }
 
 const adminTabs = Array.from(document.querySelectorAll('.admin-tab'));
@@ -512,6 +857,7 @@ contactList.addEventListener('click', async (event) => {
 
 // Supabase Auth needs an email and a password of 6+ characters. The mobile number
 // becomes the login identifier and the MPIN is wrapped into the password.
+// Keep this legacy auth identifier so existing accounts can still sign in.
 const mobileToEmail = (mobile) => `${mobile}@users.justnowjobs.app`;
 const mpinToPassword = (mpin) => `jn-mpin-${mpin}`;
 
@@ -710,7 +1056,9 @@ profileToggle.addEventListener('click', () => {
 });
 document.getElementById('closeAccountDialog').addEventListener('click', () => accountDialog.close());
 if (new URLSearchParams(location.search).get('account') === '1') {
-  history.replaceState(null, '', location.pathname);
+  const url = new URL(location.href);
+  url.searchParams.delete('account');
+  history.replaceState(null, '', url.href);
   profileToggle.click();
 }
 accountDialog.addEventListener('click', (event) => {
@@ -738,4 +1086,12 @@ if (db) {
 
 renderJobs();
 loadProfile().then(renderAccount);
-fetchJobs();
+loadDailyQuestion();
+fetchJobs().then(() => {
+  const sharedJobId = new URLSearchParams(location.search).get('job');
+  if (!sharedJobId) return;
+  if (!jobsAreLive) return setStatus(jobShareStatus, 'Could not load the shared job. Please try again when live listings are available.', true);
+  const job = jobs.find((item) => String(item.id) === sharedJobId);
+  if (job) openJobDialog(job);
+  else setStatus(jobShareStatus, 'This shared job is no longer available.', true);
+});
