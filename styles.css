@@ -155,8 +155,12 @@ h2 { margin: 12px 0 8px; font-size: clamp(27px, 3.2vw, 37px); letter-spacing: -1
 .community-mark span { position: absolute; top: 5px; right: 5px; font-size: 9px; }
 .community .eyebrow { color: #4f6d27; font-size: 8px; }.community h2 { margin: 6px 0 0; font-size: 20px; letter-spacing: -.7px; }
 .community > a { margin-left: auto; padding: 12px 15px; border-radius: 6px; background: var(--deep-green); color: white; font-size: 10px; font-weight: 700; white-space: nowrap; }.community > a span { padding-left: 10px; color: var(--green); font-size: 14px; }
-footer { min-height: 75px; padding: 15px 7.1%; display: flex; align-items: center; justify-content: space-between; background: #fff; color: #4a554e; font-size: 10px; }
+footer { min-height: 75px; padding: 15px 7.1%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #fff; color: #4a554e; font-size: 10px; }
 .footer-social { display: flex; align-items: center; gap: 9px; }
+.install-app { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 280px; }
+.install-app-button { padding: 8px 12px; border: 1px solid #dce2d8; border-radius: 7px; background: #fff; color: var(--deep-green); font: inherit; font-weight: 700; cursor: pointer; }
+.install-app-button:hover { background: var(--green); }
+.install-app-status { line-height: 1.4; }
 .social-icon { display: inline-grid; place-items: center; width: 32px; height: 32px; border: 1px solid #dce2d8; border-radius: 50%; color: #4a554e; }
 .social-icon svg { width: 16px; height: 16px; fill: currentColor; }
 .footer-brand { color: var(--ink); font-size: 13px; }.footer-brand .brand-mark { width: 25px; height: 25px; font-size: 15px; border-radius: 7px; }
@@ -316,4 +320,16 @@ footer { min-height: 75px; padding: 15px 7.1%; display: flex; align-items: cente
   .job-dialog-actions { padding: 16px 20px 21px; }
   .account-body { padding: 18px 20px 22px; }
   .account-actions { padding: 16px 0 0; }
+}
+
+@media (max-width: 900px) {
+  .search-panel { flex-wrap: wrap; gap: 4px; }
+  .search-box { flex: 1 0 100%; min-width: 0; border-bottom: 1px solid var(--line); }
+  .search-box input { min-width: 0; }
+  .filter-box, .filter-box + .filter-box { flex: 1 1 130px; min-width: 0; padding: 9px 7px; border-left: 0; }
+  .filter-box select { width: 100%; min-width: 0; }
+  .search-box input, .filter-box select, .admin-fields input, .admin-fields select, .admin-fields textarea, .contact-fields input, .share-dialog-content textarea { font-size: 16px; }
+}
+@media (max-width: 360px) {
+  .site-header > .header-cta { display: none; }
 }
