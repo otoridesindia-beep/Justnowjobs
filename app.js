@@ -375,17 +375,17 @@ function jobToRow(job) {
   };
 }
 
-let jobs = getInitialJobs();
+let jobs = [];
 let jobsAreLive = false;
 
 async function fetchJobs() {
   if (!db) {
-    jobsNotice.textContent = 'Could not reach the database. Showing sample opportunities.';
+    jobsNotice.textContent = 'Could not reach the database. Please check your connection and refresh.';
     return;
   }
   const { data, error } = await db.from('jobs').select('*').order('created_at', { ascending: false });
   if (error) {
-    jobsNotice.textContent = 'Could not load live listings. Showing sample opportunities.';
+    jobsNotice.textContent = 'Could not load live listings. Please refresh and try again.';
     return;
   }
   jobs = data.map(rowToJob);
