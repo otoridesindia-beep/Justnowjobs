@@ -652,8 +652,22 @@ function renderAdminList() {
     </div>`).join('') || '<p class="admin-note">No job listings yet. Add one using the form above.</p>';
 }
 
+function syncJobRoleOptions(preferredRole) {
+  const category = document.getElementById('jobCategory').value;
+  const roleSelect = document.getElementById('jobRole');
+  roleSelect.querySelectorAll('optgroup').forEach((group) => {
+    group.hidden = group.dataset.category !== category;
+    group.disabled = group.hidden;
+  });
+  const options = [...roleSelect.querySelectorAll('optgroup:not([disabled]) option')];
+  roleSelect.value = (options.find((o) => o.value === preferredRole) || options[0]).value;
+}
+document.getElementById('jobCategory').addEventListener('change', () => syncJobRoleOptions());
+syncJobRoleOptions();
+
 function resetForm() {
   jobForm.reset();
+  syncJobRoleOptions();
   document.getElementById('jobId').value = '';
   document.getElementById('jobArrangement').value = 'Full-time';
   document.getElementById('formHeading').textContent = 'Post a job';
@@ -722,7 +736,8 @@ adminJobList.addEventListener('click', async (event) => {
     document.getElementById('jobId').value = job.id;
     document.getElementById('jobTitle').value = job.title;
     document.getElementById('jobCompany').value = job.company;
-    document.getElementById('jobRole').value = job.role;
+    document.getElementById('jobCategory').value = categoryOf(job.role);
+    syncJobRoleOptions(job.role);
     document.getElementById('jobType').value = job.listingType;
     document.getElementById('jobPlace').value = job.place || '';
     jobStateSelect.value = job.state || '';
