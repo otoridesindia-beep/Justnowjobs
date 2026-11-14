@@ -67,7 +67,7 @@ let savedJobIds = new Set();
 let savedJobsStorageAvailable = true;
 let savedJobsOnly = false;
 let activeCategory = 'all';
-const NON_IT_ROLES = new Set(['HR Executive', 'Sales Executive', 'Marketing Executive', 'Accountant', 'Customer Support', 'Operations Executive', 'Business Development', 'Admin / Back Office']);
+const NON_IT_ROLES = new Set(['HR Executive', 'Sales Executive', 'Marketing Executive', 'Accountant', 'Customer Support', 'Operations Executive', 'Business Development', 'Admin / Back Office', 'Other Non-IT']);
 const categoryOf = (role) => (NON_IT_ROLES.has(role) ? 'Non-IT' : 'IT');
 let savedJobsLoadError = '';
 
