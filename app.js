@@ -1081,6 +1081,16 @@ profileToggle.addEventListener('click', () => {
   accountDialog.showModal();
 });
 document.getElementById('closeAccountDialog').addEventListener('click', () => accountDialog.close());
+jobDialogApply.addEventListener('click', (event) => {
+  if (currentProfile) return;
+  event.preventDefault();
+  jobDialog.close();
+  showingAdminLogin = false;
+  renderAccount();
+  showAccountTab('signup');
+  setStatus(signupStatus, 'Please sign up or sign in to apply for this role.');
+  accountDialog.showModal();
+});
 if (new URLSearchParams(location.search).get('account') === '1') {
   const url = new URL(location.href);
   url.searchParams.delete('account');
