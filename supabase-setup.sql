@@ -142,12 +142,12 @@ create trigger daily_questions_touch_updated_at
 -- ===== Sample listings (only inserted when the table is empty) =====
 insert into public.jobs (title, company, role, location, arrangement, salary, skills, apply, logo_mark, logo_accent, logo_class, created_at)
 select * from (values
-  ('Senior Data Analyst', 'Northstar Analytics', 'Analytics', 'Remote', 'Full-time', '$110k – $140k', 'SQL, Tableau', 'mailto:careers@northstar.example?subject=Senior%20Data%20Analyst', 'N', '↗', 'logo-northstar', now() - interval '2 days'),
-  ('Analytics Engineer', 'Bloom Commerce', 'Engineering', 'Hybrid', 'Full-time · Hybrid', '$125k – $155k', 'dbt, Snowflake, New York', 'mailto:careers@bloom.example?subject=Analytics%20Engineer', 'b', '.', 'logo-bloom', now() - interval '4 days'),
-  ('Machine Learning Scientist', 'Vertex Health', 'Science', 'Remote', 'Full-time', '$145k – $180k', 'Python, PyTorch, healthcare', 'mailto:careers@vertex.example?subject=Machine%20Learning%20Scientist', 'V', '+', 'logo-vertex', now() - interval '7 days'),
-  ('Product Data Analyst', 'Goodside Labs', 'Product', 'Hybrid', 'Full-time · Hybrid', '$95k – $120k', 'experimentation, metrics, Austin', 'mailto:careers@goodside.example?subject=Product%20Data%20Analyst', 'g', '+', 'logo-goodside', now() - interval '7 days'),
-  ('Data Engineer', 'Fieldwork Climate', 'Engineering', 'On-site', 'Full-time · On-site', '$130k – $165k', 'BigQuery, Airflow, San Francisco', 'mailto:careers@fieldwork.example?subject=Data%20Engineer', 'F', '/', 'logo-fieldwork', now() - interval '14 days'),
-  ('Business Intelligence Analyst', 'Orbit Finance', 'Analytics', 'Remote', 'Full-time', '$90k – $115k', 'Power BI, SQL', 'mailto:careers@orbit.example?subject=Business%20Intelligence%20Analyst', 'O', '°', 'logo-orbit', now() - interval '14 days')
+  ('Senior Data Analyst', 'Northstar Analytics', 'Analytics', 'Remote', 'Full-time', '₹18 – ₹24 LPA', 'SQL, Tableau', 'mailto:careers@northstar.example?subject=Senior%20Data%20Analyst', 'N', '↗', 'logo-northstar', now() - interval '2 days'),
+  ('Analytics Engineer', 'Bloom Commerce', 'Engineering', 'Hybrid', 'Full-time · Hybrid', '₹20 – ₹26 LPA', 'dbt, Snowflake, New York', 'mailto:careers@bloom.example?subject=Analytics%20Engineer', 'b', '.', 'logo-bloom', now() - interval '4 days'),
+  ('Machine Learning Scientist', 'Vertex Health', 'Science', 'Remote', 'Full-time', '₹25 – ₹32 LPA', 'Python, PyTorch, healthcare', 'mailto:careers@vertex.example?subject=Machine%20Learning%20Scientist', 'V', '+', 'logo-vertex', now() - interval '7 days'),
+  ('Product Data Analyst', 'Goodside Labs', 'Product', 'Hybrid', 'Full-time · Hybrid', '₹15 – ₹20 LPA', 'experimentation, metrics, Austin', 'mailto:careers@goodside.example?subject=Product%20Data%20Analyst', 'g', '+', 'logo-goodside', now() - interval '7 days'),
+  ('Data Engineer', 'Fieldwork Climate', 'Engineering', 'On-site', 'Full-time · On-site', '₹22 – ₹28 LPA', 'BigQuery, Airflow, San Francisco', 'mailto:careers@fieldwork.example?subject=Data%20Engineer', 'F', '/', 'logo-fieldwork', now() - interval '14 days'),
+  ('Business Intelligence Analyst', 'Orbit Finance', 'Analytics', 'Remote', 'Full-time', '₹14 – ₹19 LPA', 'Power BI, SQL', 'mailto:careers@orbit.example?subject=Business%20Intelligence%20Analyst', 'O', '°', 'logo-orbit', now() - interval '14 days')
 ) as seed (title, company, role, location, arrangement, salary, skills, apply, logo_mark, logo_accent, logo_class, created_at)
 where not exists (select 1 from public.jobs);
 
