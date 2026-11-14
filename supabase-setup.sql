@@ -57,7 +57,7 @@ create table if not exists public.jobs (
   id uuid primary key default gen_random_uuid(),
   title text not null check (char_length(title) between 1 and 150),
   company text not null check (char_length(company) between 1 and 150),
-  role text not null check (role in ('Analytics', 'Engineering', 'Science', 'Product')),
+  role text not null check (role in ('Data Analyst', 'Power BI Developer', 'SQL Developer', 'Data Engineer', 'Azure Data Engineer', 'Tableau Developer', 'BI Developer', 'Informatica Developer', 'ETL Developer', 'Snowflake Developer', 'Databricks Developer', 'Python Data Engineer', 'Analytics Engineer', 'Data Scientist', 'Microsoft Fabric Developer')),
   location text not null check (location in ('Remote', 'Hybrid', 'On-site')),
   arrangement text not null check (char_length(arrangement) between 1 and 80),
   salary text not null check (char_length(salary) between 1 and 80),
@@ -142,12 +142,12 @@ create trigger daily_questions_touch_updated_at
 -- ===== Sample listings (only inserted when the table is empty) =====
 insert into public.jobs (title, company, role, location, arrangement, salary, skills, apply, logo_mark, logo_accent, logo_class, created_at)
 select * from (values
-  ('Senior Data Analyst', 'Northstar Analytics', 'Analytics', 'Remote', 'Full-time', '₹18 – ₹24 LPA', 'SQL, Tableau', 'mailto:careers@northstar.example?subject=Senior%20Data%20Analyst', 'N', '↗', 'logo-northstar', now() - interval '2 days'),
-  ('Analytics Engineer', 'Bloom Commerce', 'Engineering', 'Hybrid', 'Full-time · Hybrid', '₹20 – ₹26 LPA', 'dbt, Snowflake, New York', 'mailto:careers@bloom.example?subject=Analytics%20Engineer', 'b', '.', 'logo-bloom', now() - interval '4 days'),
-  ('Machine Learning Scientist', 'Vertex Health', 'Science', 'Remote', 'Full-time', '₹25 – ₹32 LPA', 'Python, PyTorch, healthcare', 'mailto:careers@vertex.example?subject=Machine%20Learning%20Scientist', 'V', '+', 'logo-vertex', now() - interval '7 days'),
-  ('Product Data Analyst', 'Goodside Labs', 'Product', 'Hybrid', 'Full-time · Hybrid', '₹15 – ₹20 LPA', 'experimentation, metrics, Austin', 'mailto:careers@goodside.example?subject=Product%20Data%20Analyst', 'g', '+', 'logo-goodside', now() - interval '7 days'),
-  ('Data Engineer', 'Fieldwork Climate', 'Engineering', 'On-site', 'Full-time · On-site', '₹22 – ₹28 LPA', 'BigQuery, Airflow, San Francisco', 'mailto:careers@fieldwork.example?subject=Data%20Engineer', 'F', '/', 'logo-fieldwork', now() - interval '14 days'),
-  ('Business Intelligence Analyst', 'Orbit Finance', 'Analytics', 'Remote', 'Full-time', '₹14 – ₹19 LPA', 'Power BI, SQL', 'mailto:careers@orbit.example?subject=Business%20Intelligence%20Analyst', 'O', '°', 'logo-orbit', now() - interval '14 days')
+  ('Senior Data Analyst', 'Northstar Analytics', 'Data Analyst', 'Remote', 'Full-time', '₹18 – ₹24 LPA', 'SQL, Tableau', 'mailto:careers@northstar.example?subject=Senior%20Data%20Analyst', 'N', '↗', 'logo-northstar', now() - interval '2 days'),
+  ('Analytics Engineer', 'Bloom Commerce', 'Analytics Engineer', 'Hybrid', 'Full-time · Hybrid', '₹20 – ₹26 LPA', 'dbt, Snowflake, New York', 'mailto:careers@bloom.example?subject=Analytics%20Engineer', 'b', '.', 'logo-bloom', now() - interval '4 days'),
+  ('Machine Learning Scientist', 'Vertex Health', 'Data Scientist', 'Remote', 'Full-time', '₹25 – ₹32 LPA', 'Python, PyTorch, healthcare', 'mailto:careers@vertex.example?subject=Machine%20Learning%20Scientist', 'V', '+', 'logo-vertex', now() - interval '7 days'),
+  ('Product Data Analyst', 'Goodside Labs', 'Data Analyst', 'Hybrid', 'Full-time · Hybrid', '₹15 – ₹20 LPA', 'experimentation, metrics, Austin', 'mailto:careers@goodside.example?subject=Product%20Data%20Analyst', 'g', '+', 'logo-goodside', now() - interval '7 days'),
+  ('Data Engineer', 'Fieldwork Climate', 'Data Engineer', 'On-site', 'Full-time · On-site', '₹22 – ₹28 LPA', 'BigQuery, Airflow, San Francisco', 'mailto:careers@fieldwork.example?subject=Data%20Engineer', 'F', '/', 'logo-fieldwork', now() - interval '14 days'),
+  ('Business Intelligence Analyst', 'Orbit Finance', 'BI Developer', 'Remote', 'Full-time', '₹14 – ₹19 LPA', 'Power BI, SQL', 'mailto:careers@orbit.example?subject=Business%20Intelligence%20Analyst', 'O', '°', 'logo-orbit', now() - interval '14 days')
 ) as seed (title, company, role, location, arrangement, salary, skills, apply, logo_mark, logo_accent, logo_class, created_at)
 where not exists (select 1 from public.jobs);
 

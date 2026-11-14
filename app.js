@@ -60,18 +60,8 @@ const tabSignup = document.getElementById('tabSignup');
 const tabSignin = document.getElementById('tabSignin');
 const openAdminButton = document.getElementById('openAdminButton');
 
-const roleLabels = {
-  Analytics: 'ANALYTICS',
-  Engineering: 'ENGINEERING',
-  Science: 'DATA SCIENCE',
-  Product: 'PRODUCT'
-};
-const roleClasses = {
-  Analytics: '',
-  Engineering: 'tag-engineering',
-  Science: 'tag-science',
-  Product: 'tag-product'
-};
+const roleLabels = {};
+const roleClasses = {};
 const SAVED_JOBS_KEY = 'hyrnex-saved-jobs';
 let savedJobIds = new Set();
 let savedJobsStorageAvailable = true;
