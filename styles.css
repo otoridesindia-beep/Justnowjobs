@@ -333,3 +333,8 @@ footer { min-height: 75px; padding: 15px 7.1%; display: flex; flex-wrap: wrap; a
 @media (max-width: 360px) {
   .site-header > .header-cta { display: none; }
 }
+
+.category-tabs { display: flex; gap: 8px; margin: 0 0 14px; }
+.category-tab { padding: 9px 18px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.category-tab.is-active { background: var(--deep-green); border-color: var(--deep-green); color: var(--green); }
+.category-tab:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }

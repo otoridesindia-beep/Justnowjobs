@@ -57,7 +57,7 @@ create table if not exists public.jobs (
   id uuid primary key default gen_random_uuid(),
   title text not null check (char_length(title) between 1 and 150),
   company text not null check (char_length(company) between 1 and 150),
-  role text not null check (role in ('Data Analyst', 'Power BI Developer', 'SQL Developer', 'Data Engineer', 'Azure Data Engineer', 'Tableau Developer', 'BI Developer', 'Informatica Developer', 'ETL Developer', 'Snowflake Developer', 'Databricks Developer', 'Python Data Engineer', 'Analytics Engineer', 'Data Scientist', 'Microsoft Fabric Developer')),
+  role text not null check (role in ('Data Analyst', 'Power BI Developer', 'SQL Developer', 'Data Engineer', 'Azure Data Engineer', 'Tableau Developer', 'BI Developer', 'Informatica Developer', 'ETL Developer', 'Snowflake Developer', 'Databricks Developer', 'Python Data Engineer', 'Analytics Engineer', 'Data Scientist', 'Microsoft Fabric Developer', 'HR Executive', 'Sales Executive', 'Marketing Executive', 'Accountant', 'Customer Support', 'Operations Executive', 'Business Development', 'Admin / Back Office')),
   location text not null check (location in ('Remote', 'Hybrid', 'On-site')),
   arrangement text not null check (char_length(arrangement) between 1 and 80),
   salary text not null check (char_length(salary) between 1 and 80),

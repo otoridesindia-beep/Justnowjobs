@@ -66,6 +66,9 @@ const SAVED_JOBS_KEY = 'hyrnex-saved-jobs';
 let savedJobIds = new Set();
 let savedJobsStorageAvailable = true;
 let savedJobsOnly = false;
+let activeCategory = 'all';
+const NON_IT_ROLES = new Set(['HR Executive', 'Sales Executive', 'Marketing Executive', 'Accountant', 'Customer Support', 'Operations Executive', 'Business Development', 'Admin / Back Office']);
+const categoryOf = (role) => (NON_IT_ROLES.has(role) ? 'Non-IT' : 'IT');
 let savedJobsLoadError = '';
 
 try {
@@ -429,12 +432,13 @@ function filterJobs() {
 
   jobsList.querySelectorAll('.job-card').forEach((card) => {
     const matchesSearch = !query || card.dataset.search.includes(query);
+    const matchesCategory = activeCategory === 'all' || categoryOf(card.dataset.role) === activeCategory;
     const matchesRole = role === 'all' || card.dataset.role === role;
     const matchesLocation = location === 'all' || card.dataset.location === location;
     const matchesType = type === 'all' || card.dataset.type === type;
     const matchesState = state === 'all' || card.dataset.state === state;
     const matchesSaved = !savedJobsOnly || savedJobIds.has(card.dataset.jobId);
-    const isVisible = matchesSearch && matchesRole && matchesLocation && matchesType && matchesState && matchesSaved;
+    const isVisible = matchesSearch && matchesCategory && matchesRole && matchesLocation && matchesType && matchesState && matchesSaved;
     card.hidden = !isVisible;
     if (isVisible) visibleCount += 1;
   });
@@ -598,6 +602,23 @@ jobDialog.addEventListener('click', (event) => {
 
 searchInput.addEventListener('input', filterJobs);
 roleFilter.addEventListener('change', filterJobs);
+function setCategory(category) {
+  activeCategory = category;
+  document.querySelectorAll('.category-tab').forEach((tab) => {
+    const isActive = tab.dataset.category === category;
+    tab.classList.toggle('is-active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+  roleFilter.querySelectorAll('optgroup').forEach((group) => {
+    group.hidden = category !== 'all' && group.dataset.category !== category;
+    group.disabled = group.hidden;
+  });
+  if (roleFilter.selectedOptions[0]?.parentElement.disabled) roleFilter.value = 'all';
+  filterJobs();
+}
+document.querySelectorAll('.category-tab').forEach((tab) => {
+  tab.addEventListener('click', () => setCategory(tab.dataset.category));
+});
 locationFilter.addEventListener('change', filterJobs);
 typeFilter.addEventListener('change', filterJobs);
 stateFilter.addEventListener('change', filterJobs);
@@ -614,7 +635,7 @@ document.getElementById('clearFilters').addEventListener('click', () => {
   stateFilter.value = 'all';
   savedJobsOnly = false;
   savedJobsToggle.setAttribute('aria-pressed', 'false');
-  filterJobs();
+  setCategory('all');
 });
 
 /* ---------- Admin console ---------- */

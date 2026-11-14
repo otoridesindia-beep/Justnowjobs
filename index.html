@@ -64,11 +64,16 @@
           <div>
             <div class="eyebrow section-eyebrow">HYRNEX OPPORTUNITIES</div>
             <h2>Your next move <span>starts here.</span></h2>
-            <p>Explore data roles by specialty, listing type, and work mode.</p>
+            <p>Explore IT and non-IT roles by specialty, listing type, and work mode.</p>
           </div>
           <div class="job-count"><strong id="resultCount">6</strong><span>open roles</span></div>
         </div>
 
+        <div class="category-tabs" id="categoryTabs" role="tablist" aria-label="Job category">
+          <button class="category-tab is-active" type="button" role="tab" aria-selected="true" data-category="all">All jobs</button>
+          <button class="category-tab" type="button" role="tab" aria-selected="false" data-category="IT">IT</button>
+          <button class="category-tab" type="button" role="tab" aria-selected="false" data-category="Non-IT">Non-IT</button>
+        </div>
         <div class="search-panel">
           <label class="search-box">
             <span class="search-icon" aria-hidden="true">⌕</span>
@@ -77,22 +82,34 @@
           <label class="filter-box">
             <span class="filter-label">ROLE TYPE</span>
             <select id="roleFilter" aria-label="Filter by role type">
-              <option value="all">All data roles</option>
-              <option value="Data Analyst">Data Analyst</option>
-              <option value="Power BI Developer">Power BI Developer</option>
-              <option value="SQL Developer">SQL Developer</option>
-              <option value="Data Engineer">Data Engineer</option>
-              <option value="Azure Data Engineer">Azure Data Engineer</option>
-              <option value="Tableau Developer">Tableau Developer</option>
-              <option value="BI Developer">BI Developer</option>
-              <option value="Informatica Developer">Informatica Developer</option>
-              <option value="ETL Developer">ETL Developer</option>
-              <option value="Snowflake Developer">Snowflake Developer</option>
-              <option value="Databricks Developer">Databricks Developer</option>
-              <option value="Python Data Engineer">Python Data Engineer</option>
-              <option value="Analytics Engineer">Analytics Engineer</option>
-              <option value="Data Scientist">Data Scientist</option>
-              <option value="Microsoft Fabric Developer">Microsoft Fabric Developer</option>
+              <option value="all">All roles</option>
+              <optgroup label="IT roles" data-category="IT">
+                <option value="Data Analyst">Data Analyst</option>
+                <option value="Power BI Developer">Power BI Developer</option>
+                <option value="SQL Developer">SQL Developer</option>
+                <option value="Data Engineer">Data Engineer</option>
+                <option value="Azure Data Engineer">Azure Data Engineer</option>
+                <option value="Tableau Developer">Tableau Developer</option>
+                <option value="BI Developer">BI Developer</option>
+                <option value="Informatica Developer">Informatica Developer</option>
+                <option value="ETL Developer">ETL Developer</option>
+                <option value="Snowflake Developer">Snowflake Developer</option>
+                <option value="Databricks Developer">Databricks Developer</option>
+                <option value="Python Data Engineer">Python Data Engineer</option>
+                <option value="Analytics Engineer">Analytics Engineer</option>
+                <option value="Data Scientist">Data Scientist</option>
+                <option value="Microsoft Fabric Developer">Microsoft Fabric Developer</option>
+              </optgroup>
+              <optgroup label="Non-IT roles" data-category="Non-IT">
+                <option value="HR Executive">HR Executive</option>
+                <option value="Sales Executive">Sales Executive</option>
+                <option value="Marketing Executive">Marketing Executive</option>
+                <option value="Accountant">Accountant</option>
+                <option value="Customer Support">Customer Support</option>
+                <option value="Operations Executive">Operations Executive</option>
+                <option value="Business Development">Business Development</option>
+                <option value="Admin / Back Office">Admin / Back Office</option>
+              </optgroup>
             </select>
           </label>
           <label class="filter-box">
@@ -316,21 +333,35 @@
             <label>Job title<input id="jobTitle" type="text" placeholder="e.g. Data Analyst" required /></label>
             <label>Company<input id="jobCompany" type="text" placeholder="Company name" required /></label>
             <label>Listing type<select id="jobType" required><option value="Posting">Posting</option><option value="Referral">Referral</option><option value="Walk-in">Walk-in</option><option value="Drive">Drive</option></select></label>
-            <label>Role type<select id="jobRole" required><option value="Data Analyst">Data Analyst</option>
-              <option value="Power BI Developer">Power BI Developer</option>
-              <option value="SQL Developer">SQL Developer</option>
-              <option value="Data Engineer">Data Engineer</option>
-              <option value="Azure Data Engineer">Azure Data Engineer</option>
-              <option value="Tableau Developer">Tableau Developer</option>
-              <option value="BI Developer">BI Developer</option>
-              <option value="Informatica Developer">Informatica Developer</option>
-              <option value="ETL Developer">ETL Developer</option>
-              <option value="Snowflake Developer">Snowflake Developer</option>
-              <option value="Databricks Developer">Databricks Developer</option>
-              <option value="Python Data Engineer">Python Data Engineer</option>
-              <option value="Analytics Engineer">Analytics Engineer</option>
-              <option value="Data Scientist">Data Scientist</option>
-              <option value="Microsoft Fabric Developer">Microsoft Fabric Developer</option></select></label>
+            <label>Role type<select id="jobRole" required>
+              <optgroup label="IT roles" data-category="IT">
+                <option value="Data Analyst">Data Analyst</option>
+                <option value="Power BI Developer">Power BI Developer</option>
+                <option value="SQL Developer">SQL Developer</option>
+                <option value="Data Engineer">Data Engineer</option>
+                <option value="Azure Data Engineer">Azure Data Engineer</option>
+                <option value="Tableau Developer">Tableau Developer</option>
+                <option value="BI Developer">BI Developer</option>
+                <option value="Informatica Developer">Informatica Developer</option>
+                <option value="ETL Developer">ETL Developer</option>
+                <option value="Snowflake Developer">Snowflake Developer</option>
+                <option value="Databricks Developer">Databricks Developer</option>
+                <option value="Python Data Engineer">Python Data Engineer</option>
+                <option value="Analytics Engineer">Analytics Engineer</option>
+                <option value="Data Scientist">Data Scientist</option>
+                <option value="Microsoft Fabric Developer">Microsoft Fabric Developer</option>
+              </optgroup>
+              <optgroup label="Non-IT roles" data-category="Non-IT">
+                <option value="HR Executive">HR Executive</option>
+                <option value="Sales Executive">Sales Executive</option>
+                <option value="Marketing Executive">Marketing Executive</option>
+                <option value="Accountant">Accountant</option>
+                <option value="Customer Support">Customer Support</option>
+                <option value="Operations Executive">Operations Executive</option>
+                <option value="Business Development">Business Development</option>
+                <option value="Admin / Back Office">Admin / Back Office</option>
+              </optgroup>
+            </select></label>
             <label>Work mode<select id="jobLocation" required><option value="Remote">Remote</option><option value="Hybrid">Hybrid</option><option value="On-site">On-site</option></select></label>
             <label class="admin-wide">Job location (city / address)<input id="jobPlace" type="text" placeholder="e.g. Hyderabad, Hitech City" required></label>
             <label>State / UT<select id="jobState" required><option value="">Select state</option></select></label>
